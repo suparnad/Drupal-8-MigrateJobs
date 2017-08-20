@@ -1,0 +1,95 @@
+# Migration configuration for jobs content.
+id: jobs_node
+label: Jobs
+migration_group: jobs
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: xml
+  urls: http://****/jobs.xml
+  item_selector: /jobs/job
+  fields:
+    - name: title
+      label: Content title
+      selector: title
+    - name: reference
+      label: Job reference
+      selector: reference
+    - name: email
+      label: Contact email
+      selector: email
+    - name: url
+      label: Applications url
+      selector: url
+    - name: agency
+      label: Agency
+      selector: agency
+    - name: contact
+      label: Contact name
+      selector: contact
+    - name: description
+      label: Job description
+      selector: description
+    - name: salary_min
+      label: Minimum salary
+      selector: salary_min
+    - name: salary_max
+      label: Maximum salary
+      selector: salary_max
+    - name: salary_type
+      label: Salary Type
+      selector: salary_type
+    - name: salary_additional
+      label: Additional salary
+      selector: salary_additional
+    - name: location
+      label: Job location
+      selector: location
+    - name: category
+      label: Job Category
+      selector: category
+    - name: job_type
+      label: Job Type
+      selector: job_type
+  ids:
+    reference:
+      type: string
+destination:
+  plugin: entity:node
+process:
+  type:
+    plugin: default_value
+    default_value: job_posting
+  title: title
+  uid:
+    plugin: default_value
+    default_value: 1
+  sticky:
+    plugin: default_value
+    default_value: 0
+  'body/value': description
+  'body/format':
+    plugin: default_value
+    default_value: basic_html
+  field_job_reference: reference
+  field_email: email
+  'field_application_link/uri':
+    plugin: callback
+    callable: trim
+    source: url
+  'field_application_link/title':
+    plugin: default_value
+    default_value: 'Apply for this role'
+  field_agency: agency
+  field_job_contact: contact
+  field_min_salary: salary_min
+  field_max_salary: salary_max
+  field_salary_type: salary_type
+  field_salary_addition: salary_additional
+  field_job_location: location
+  field_job_type: job_type
+  field_job_category: category
+dependencies:
+  enforced:
+    module:
+      - migrate_jobs

@@ -1,0 +1,7 @@
+entity.migration.destination:
+  path: '/admin/structure/migrate/import/jobs'
+  defaults:
+    _controller: '\Drupal\migrate_jobs\Controller\MigrateJobsController::import'
+    _title: 'Import'
+  requirements:
+    _permission: 'administer migrations'
